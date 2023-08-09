@@ -1,0 +1,31 @@
+name: thegreatestbooks.org - Scrapy
+run-name: ${{ github.actor }} is runnig thegreatestbooks.org - Scrapy
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install scrapy
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          mkdir dist
+      - name: Start scraping
+        run: scrapy crawl thegreatestbooks -O dist/books-list.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
