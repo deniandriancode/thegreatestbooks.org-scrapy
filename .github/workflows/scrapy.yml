@@ -24,7 +24,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           mkdir dist
       - name: Start scraping
-        run: scrapy crawl thegreatestbooks -O dist/books-list.json
+        run: scrapy crawl thegreatestbooks -O dist/books-list.json -O dist/books-list.xml -O dist/books-list.csv
       - uses: actions/upload-artifact@v3
         with:
           name: dist
